@@ -40,7 +40,7 @@ minetest.register_abm({
 	nodenames = {"default:water_source,default:air"},
 	neighbors = {"default:air"},
 	interval = 5,
-	chance = 50,
+	chance = 20,
 	action=
 	function(pos, node, active_object_count,active_object_count_wider)
 		--local pos = {x = pos.x, y = pos.y + 1, z = pos.z}
