@@ -30,7 +30,7 @@ minetest.register_globalstep(function(dtime)
    -- reset timer
    timer=0
    -- do calc stuff
-   height=math.sin(2*math.pi*minetest.get_timeofday())
+   height=2*math.sin(2*math.pi*minetest.get_timeofday())
    minetest.log(height)
 end)
 
