@@ -1,6 +1,13 @@
 
 local height=1;
 
+--[[
+removed for the following reasons:
+ - abms are slow
+ - mese isn't redily available
+]]
+
+--[[
 minetest.register_abm({
 	nodenames = {"default:mese"},
 	interval = 10,
@@ -9,7 +16,7 @@ minetest.register_abm({
 		minetest.log(height)
 	end
 })
-
+--]]
 minetest.register_abm({
 	nodenames = {"default:water_source,default:air"},
 	neighbors = {"default:air"},
