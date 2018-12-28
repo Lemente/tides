@@ -43,13 +43,18 @@ minetest.register_abm({
 	chance = 20,
 	action=
 	function(pos, node, active_object_count,active_object_count_wider)
+		lminetest.log(dump(pos))
 		--local pos = {x = pos.x, y = pos.y + 1, z = pos.z}
 		if minetest.get_node(pos).name=="default:water_source" or minetest.get_node(pos).name=="default:air" then
 			if pos.y<=height then
-				minetest.set_node(pos, {name = "default:water_source"})
+				--minetest.set_node(pos, {name = "default:water_source"})
+				minetest.set_node(pos, {name = "default:mese"})
+--				minetest.log()
 			else
 				minetest.remove_node(pos)
 			end
+		else
+			minetest.log("not water or air")
         end
 	end
 })
