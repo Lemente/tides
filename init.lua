@@ -31,6 +31,7 @@ minetest.register_globalstep(function(dtime)
    timer=0
    -- do calc stuff
    height=math.sin(2*math.pi*minetest.get_timeofday())
+   minetest.log(height)
 end)
 
 --Thanks BuckarooBanzay!
