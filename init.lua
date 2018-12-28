@@ -17,6 +17,24 @@ minetest.register_abm({
 	end
 })
 --]]
+
+local timer = 0
+
+--I'l just copy this over from https://forum.minetest.net/viewtopic.php?f=9&t=21600#p338643
+
+minetest.register_globalstep(function(dtime)
+   -- increase time var
+   timer = timer + dtime
+   -- run every 2 seconds otherwise abort
+   if timer < 2 then return end
+   -- reset timer
+   timer=0
+   -- do calc stuff
+   height=math.sin(2*math.pi*minetest.get_timeofday())
+end)
+
+--Thanks BuckarooBanzay!
+
 minetest.register_abm({
 	nodenames = {"default:water_source,default:air"},
 	neighbors = {"default:air"},
