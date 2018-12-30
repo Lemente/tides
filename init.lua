@@ -80,7 +80,7 @@ minetest.register_lbm({
 
 minetest.register_lbm({
 	name="tides:tide_up",
-	nodenames={"default:air","default:sand"},
+	nodenames={"default:air","default:sand"}, --sand erodes above tidal cliffs.
 	run_at_every_load=true,
 	action = function(pos,node)
 		pos2=pos
