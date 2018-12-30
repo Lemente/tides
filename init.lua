@@ -67,16 +67,35 @@ using lbms, as per FaceDeer's sugestion
 ]]
 
 
+minetest.register_node("tides:stink_air",{
+	description="air that is below the tideline that, incidentally, stinks.",
+	drawtype = "airlike",
+	paramtype = "light",
+
+	sunlight_propagates =true,
+	walkable=false,
+	pointable=false,
+	diggable=false,
+	buildable_to=true,
+	air_equivalent=true, --no idea what it does, might have negative consequences?
+	drop="",
+	groups = {not_in_creative_inventory=1}
+
+})
+
 minetest.register_lbm({
 	name="tides:tide_down",
 	nodenames = {"default:water_source"},
 	run_at_every_load=true,
 	action = function(pos,node)
 		if pos.y>height then --tides will also happen in pools, dunno how to solve.
-			minetest.remove_node(pos)
+			--minetest.remove_node(pos)
+			minetest.set_node(pos,{name="tides:stink_air"})
 		end
 	end
 })
+
+--[[
 
 minetest.register_lbm({
 	name="tides:tide_up",
@@ -89,6 +108,20 @@ minetest.register_lbm({
 			minetest.set_node(pos,{name="default:water_source"})
 		else
 --			minetest.log(dump(minetest.get_node(pos2)))
+		end
+	end
+})
+
+--]]
+
+
+minetest.register_lbm({
+	name="tides:tide_up",
+	nodenames={"tides:stink_air"},
+	run_at_every_load=true,
+	action=function(pos,node)
+		if pos.y<=height then
+			minetest.set_node(pos,{name="default:water_source"})
 		end
 	end
 })
