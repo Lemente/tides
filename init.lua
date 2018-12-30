@@ -37,7 +37,7 @@ end)
 --Thanks BuckarooBanzay!
 --[[
 minetest.register_abm({
-	nodenames = {"default:water_source,default:air"},
+	nodenames = {"default:water_source","default:air"},
 	--neighbors = {"default:air"},
 	interval = 5,
 	chance = 5,
@@ -66,3 +66,14 @@ minetest.register_abm({
 using lbms, as per FaceDeer's sugestion
 ]]
 
+
+minetest.register_lbm({
+	name="minetest-tides:tide_down",
+	nodenames = {"default:water_source"},
+	run_at_every_load=true,
+	action = function(pos,node)
+		if pos.y>height then --tides will also happen in pools, dunno how to solve.
+			minetest.remove_node(pos)
+		end
+	end
+})
