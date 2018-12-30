@@ -87,6 +87,8 @@ minetest.register_lbm({
 		pos2.y=pos.y-1
 		if pos.y < height and minetest.get_node(pos2).name=="default:water_source" then
 			minetest.set_node(pos,{name="default:water_source"})
+		else
+--			minetest.log(dump(minetest.get_node(pos2)))
 		end
 	end
 })
