@@ -35,15 +35,16 @@ minetest.register_globalstep(function(dtime)
 end)
 
 --Thanks BuckarooBanzay!
-
+--[[
 minetest.register_abm({
 	nodenames = {"default:water_source,default:air"},
-	neighbors = {"default:air"},
+	--neighbors = {"default:air"},
 	interval = 5,
-	chance = 20,
+	chance = 5,
 	action=
 	function(pos, node, active_object_count,active_object_count_wider)
-		lminetest.log(dump(pos))
+		minetest.log("tide abm called on ")
+		minetest.log(dump(pos))
 		--local pos = {x = pos.x, y = pos.y + 1, z = pos.z}
 		if minetest.get_node(pos).name=="default:water_source" or minetest.get_node(pos).name=="default:air" then
 			if pos.y<=height then
@@ -58,3 +59,10 @@ minetest.register_abm({
         end
 	end
 })
+--]]
+
+
+--[[
+using lbms, as per FaceDeer's sugestion
+]]
+
