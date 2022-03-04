@@ -1,5 +1,13 @@
 
+--TOFIX
+--[[
+making vectors with {} is deprecated 
+should be vector.new(pos.x, pos.y+1, pos.z) ?
+]]
+
 local height=1;
+
+local get_node = minetest.get_node
 
 --[[
 removed for the following reasons:
@@ -22,7 +30,11 @@ local timer = 0
 
 --I'l just copy this over from https://forum.minetest.net/viewtopic.php?f=9&t=21600#p338643
 
-minetest.register_globalstep(function(dtime)
+
+--HEIGHT-- deactivated and replaced by a command fior testing purposes
+-- might be modified later, or completely rewritten
+
+--[[minetest.register_globalstep(function(dtime)
    -- increase time var
    timer = timer + dtime
    -- run every 2 seconds otherwise abort
@@ -32,7 +44,29 @@ minetest.register_globalstep(function(dtime)
    -- do calc stuff
    height=2*math.sin(2*math.pi*minetest.get_timeofday())
    minetest.log(height)
-end)
+end)]]--
+
+
+--TIDE ON COMMAND
+minetest.register_privilege("tide", "player can use /tide command")
+
+minetest.register_chatcommand("tide", {
+    params = "<height>",
+    description = "choose tide height",
+    privs = {tide=true},
+    func = function(name, param)
+--      if param >= -2 and param <=2 then -- this gives a nil error
+        height = tonumber(param)
+        if not height then
+            return false, "Missing or incorrect parameter?"
+        end
+                -- I don't understand what I am supposed to put here
+        return true , "height = " .. height
+--    end
+  end,
+})
+
+
 
 --Thanks BuckarooBanzay!
 --[[
@@ -143,7 +177,33 @@ minetest.register_abm({
 	catch_up = false,
 	action=function(pos,node)
 		if pos.y<=height then
-			minetest.set_node(pos,{name="default:water_source"})
+			local water_source = "default:water_source"
+			local check_pos_east = {x=pos.x+1, y=pos.y, z=pos.z}
+			local check_pos_west = {x=pos.x-1, y=pos.y, z=pos.z}
+			local check_pos_up = {x=pos.x, y=pos.y+1, z=pos.z}
+			local check_pos_down = {x=pos.x, y=pos.y-1, z=pos.z}
+			local check_pos_north = {x=pos.x, y=pos.y, z=pos.z+1}
+			local check_pos_south = {x=pos.x, y=pos.y, z=pos.z-1}
+			local check_node_east = get_node(check_pos_east)
+			local check_node_west = get_node(check_pos_west)
+			local check_node_up = get_node(check_pos_up)
+			local check_node_down = get_node(check_pos_down)
+			local check_node_north = get_node(check_pos_north)
+			local check_node_south = get_node(check_pos_south)
+			local check_node_name_east = check_node_east.name
+			local check_node_name_west = check_node_west.name
+			local check_node_name_up = check_node_up.name
+			local check_node_name_down = check_node_down.name
+			local check_node_name_north = check_node_north.name
+			local check_node_name_south = check_node_south.name
+			--if node above is water source, and no other water source around, then becomes a water source not affected by tides
+
+			if check_node_name_up == water_source and check_node_name_down ~= water_source and check_node_name_north ~= water_source and check_node_name_south ~= water_source and check_node_name_east ~= water_source and check_node_name_west ~= water_source then 
+				minetest.set_node(pos,{name="default:river_water_source"})
+				minetest.chat_send_all("created river water at " .. tostring(pos))
+			else--if check_node_name_up ~= water_source then
+				minetest.set_node(pos,{name="default:water_source"})
+			end
 		end
 	end
 })
