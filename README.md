@@ -8,6 +8,8 @@ The current version uses a mix of ABMs and LBMs.
 ABMs for nodes in loaded mapblocks.
 LBMs to "catch-up" on the tide level when mapblocks are loaded.
 
+Remplaced the height timer by the command /tide <height>. It makes testing much easier and allows any value.
+
 Current goal : differentiate between nodes which have access to "the ocean", and small pools of water which should not be affected by tides.
 
 defining "the ocean"?
