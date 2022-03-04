@@ -5,7 +5,7 @@ making vectors with {} is deprecated
 should be vector.new(pos.x, pos.y+1, pos.z) ?
 ]]
 
-local height=-9;
+local height=1;
 
 local get_node = minetest.get_node
 
