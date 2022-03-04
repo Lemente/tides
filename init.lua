@@ -5,7 +5,7 @@ making vectors with {} is deprecated
 should be vector.new(pos.x, pos.y+1, pos.z) ?
 ]]
 
-local height=1;
+local height=-9;
 
 local get_node = minetest.get_node
 
@@ -61,7 +61,7 @@ minetest.register_chatcommand("tide", {
             return false, "Missing or incorrect parameter?"
         end
                 -- I don't understand what I am supposed to put here
-        return true , "height = " .. height
+        return true , "tide height = " .. height
 --    end
   end,
 })
@@ -171,13 +171,14 @@ minetest.register_lbm({
 minetest.register_abm({
 	name="tides:tide_up",
 	nodenames={"tides:stink_air"},
-	neighbors = {"default:water_source"},--,"tides:stink_air"},
+	neighbors = {"default:water_source","default:river_water_source"},--,"tides:stink_air"}, --neighbors are also diagonal?
 	interval = 1,
 	chance = 1, -- chance or 1,
 	catch_up = false,
 	action=function(pos,node)
 		if pos.y<=height then
 			local water_source = "default:water_source"
+			local river_water_source = "default:river_water_source"
 			local check_pos_east = {x=pos.x+1, y=pos.y, z=pos.z}
 			local check_pos_west = {x=pos.x-1, y=pos.y, z=pos.z}
 			local check_pos_up = {x=pos.x, y=pos.y+1, z=pos.z}
@@ -190,19 +191,21 @@ minetest.register_abm({
 			local check_node_down = get_node(check_pos_down)
 			local check_node_north = get_node(check_pos_north)
 			local check_node_south = get_node(check_pos_south)
-			local check_node_name_east = check_node_east.name
-			local check_node_name_west = check_node_west.name
-			local check_node_name_up = check_node_up.name
-			local check_node_name_down = check_node_down.name
-			local check_node_name_north = check_node_north.name
-			local check_node_name_south = check_node_south.name
+			local east = check_node_east.name
+			local west = check_node_west.name
+			local up = check_node_up.name
+			local down = check_node_down.name
+			local north = check_node_north.name
+			local south = check_node_south.name
 			--if node above is water source, and no other water source around, then becomes a water source not affected by tides
 
-			if check_node_name_up == water_source and check_node_name_down ~= water_source and check_node_name_north ~= water_source and check_node_name_south ~= water_source and check_node_name_east ~= water_source and check_node_name_west ~= water_source then 
+			if (up == water_source or up == river_water_source) and down ~= water_source and north ~= water_source and south ~= water_source and east ~= water_source and west ~= water_source then 
 				minetest.set_node(pos,{name="default:river_water_source"})
 				minetest.chat_send_all("created river water at " .. tostring(pos))
-			else--if check_node_name_up ~= water_source then
-				minetest.set_node(pos,{name="default:water_source"})
+			elseif up ~= water_source and (down == water_source or north == water_source or south == water_source or east == water_source or west == water_source) then
+				minetest.after(0.2, function()
+					minetest.set_node(pos,{name="default:water_source"})
+				end)
 			end
 		end
 	end
